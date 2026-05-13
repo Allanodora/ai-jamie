@@ -81,36 +81,51 @@ function Control() {
     setUrl('');
   };
 
+  const resetVisuals = () => {
+    setAllVisuals(defaultVisuals);
+    setIndex(0);
+    setVisible(false);
+  };
+
   return (
-    <main className="control-page">
-      <section className="panel hero">
-        <div><p className="eyebrow">AI Jamie MVP</p><h1>OBS floating visual controller</h1><p>Open the overlay in OBS as a Browser Source.</p></div>
-        <a className="overlay-link" href="/overlay" target="_blank" rel="noreferrer">Open overlay</a>
+    <main className="simple-page">
+      <section className="top-card">
+        <div>
+          <p className="small-title">AI Jamie</p>
+          <h1>Simple control panel</h1>
+          <p className="muted">Use these big buttons while OBS captures the overlay.</p>
+        </div>
+        <a className="open-overlay" href="/overlay" target="_blank" rel="noreferrer">Open OBS Overlay</a>
       </section>
 
-      <section className="panel controls">
-        <button onClick={() => setVisible(true)}>Show</button>
-        <button onClick={() => setVisible(false)}>Hide</button>
-        <button onClick={() => setIndex(index - 1)}>Back</button>
-        <button onClick={() => setIndex(index + 1)}>Next</button>
+      <section className="now-card">
+        <p className="muted">Now showing</p>
+        <h2>{visual?.title}</h2>
+        <p className={visible ? 'green' : 'red'}>{visible ? 'VISIBLE' : 'HIDDEN'}</p>
       </section>
 
-      <section className="panel status">
-        <h2>Current visual</h2>
-        <p><strong>{visual?.title}</strong></p>
-        <p>{visible ? 'Visible' : 'Hidden'}</p>
+      <section className="big-controls">
+        <button className="main show-btn" onClick={() => setVisible(true)}>SHOW</button>
+        <button className="main hide-btn" onClick={() => setVisible(false)}>HIDE</button>
+        <button className="main" onClick={() => setIndex(index - 1)}>BACK</button>
+        <button className="main" onClick={() => setIndex(index + 1)}>NEXT</button>
       </section>
 
-      <section className="panel add-box">
-        <h2>Add visual</h2>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
-        <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Image or video URL" />
-        <button onClick={addVisual}>Add</button>
+      <section className="add-card">
+        <h2>Add one visual</h2>
+        <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Name it, example: Mbappe yacht" />
+        <input value={url} onChange={(e) => setUrl(e.target.value)} placeholder="Paste image/video URL" />
+        <button className="add-button" onClick={addVisual}>ADD VISUAL</button>
       </section>
 
-      <section className="panel list-box">
+      <section className="list-card">
         <h2>Visuals</h2>
-        {visuals.map((item, i) => <button key={`${item.url}-${i}`} className={i === index ? 'row selected' : 'row'} onClick={() => setIndex(i)}><span>{i + 1}. {item.title}</span><small>{item.type}</small></button>)}
+        {visuals.map((item, i) => (
+          <button key={`${item.url}-${i}`} className={i === index ? 'visual-row selected' : 'visual-row'} onClick={() => setIndex(i)}>
+            {i + 1}. {item.title}
+          </button>
+        ))}
+        <button className="reset-button" onClick={resetVisuals}>Reset demo visuals</button>
       </section>
     </main>
   );
